@@ -4,9 +4,12 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/lt";
 
+
+
+
 const Anotherweathermap = (props) => {
   const listDOMelement = document.getElementById("myDropdown");
-  
+
   //STATES
   const [inputValue, setValue] = useState("Vilnius");
   const [placeList, setPlaceList] = useState([]);
@@ -21,8 +24,9 @@ const Anotherweathermap = (props) => {
   });
 
   let url = "places/" + encodeURIComponent(inputValue) + "/forecasts/long-term";
+  
 
-  const getDropDownPlaces = async () => { 
+  const getDropDownPlaces = async () => {
     const NamesData = await axios.get("places");
     const realList = NamesData.data;
     let iteminarray = [];
@@ -42,11 +46,11 @@ const Anotherweathermap = (props) => {
       }
       return i;
     };
-  
+
     const h = addZero(new Date().getHours());
     const momentTime = moment().format("l");
     const stringTim = `${momentTime} ${h}:00:00`;
-    
+
     const dataaxios = await axios.get(url);
     for (let i = 0; i < dataaxios.data.forecastTimestamps.length; i++) {
       if (dataaxios.data.forecastTimestamps[i].forecastTimeUtc === stringTim) {
@@ -95,37 +99,36 @@ const Anotherweathermap = (props) => {
   };
 
   const Search = useCallback(
+    (userinput) => {
+      let correctResult = "";
+      let dropdownList = [];
 
-  (userinput) => {
-    let correctResult = "";
-    let dropdownList = [];
-  
-    if (userinput.length > 2) {
-      const regex = new RegExp(`^${userinput}`, "i");
-      for (let i = 0; i < placeList.length; i++) {
-        correctResult = regex.test(placeList[i].name);
-        if (correctResult) {
-          dropdownList.push(placeList[i]);
-          setSearcList(dropdownList);
+      if (userinput.length > 2) {
+        const regex = new RegExp(`^${userinput}`, "i");
+        for (let i = 0; i < placeList.length; i++) {
+          correctResult = regex.test(placeList[i].name);
+          if (correctResult) {
+            dropdownList.push(placeList[i]);
+            setSearcList(dropdownList);
+          }
+          listDOMelement.classList.add("show");
         }
-        listDOMelement.classList.add("show");
+      } else if (userinput.length === 0) {
+        listDOMelement.classList.remove("show");
       }
-    } else if (userinput.length === 0){
-      listDOMelement.classList.remove("show");
-    }
-    
-  }, [text]);
+    },
+    [text]
+  );
 
   const onChangeInput = (userinput) => {
     setText(userinput);
     Search(userinput);
-    
   };
 
   const onSearchResultClick = (clickedResult) => {
-   setValue(clickedResult)
-   setText(clickedResult);
-   listDOMelement.classList.remove("show");
+    setValue(clickedResult);
+    setText(clickedResult);
+    listDOMelement.classList.remove("show");
   };
 
   return (
@@ -155,7 +158,7 @@ const Anotherweathermap = (props) => {
             <div id="myDropdown" className="dropdown-content">
               {searchList.map((itemInArray) => {
                 return (
-                  <ul className='dropdown-list'>
+                  <ul className="dropdown-list">
                     <li
                       value={itemInArray}
                       onClick={() => onSearchResultClick(itemInArray.code)}
@@ -168,7 +171,7 @@ const Anotherweathermap = (props) => {
             </div>
           </div>
           <button
-            className='cityButton'
+            className="cityButton"
             type="button"
             value="neringa-nida"
             onClick={(e) => onclicked(e.target.value)}
@@ -176,7 +179,7 @@ const Anotherweathermap = (props) => {
             Nida
           </button>
           <button
-          className='cityButton'
+            className="cityButton"
             type="button"
             value="kaunas"
             onClick={(e) => onclicked(e.target.value)}
@@ -184,7 +187,7 @@ const Anotherweathermap = (props) => {
             Kaunas
           </button>
           <button
-          className='cityButton'
+            className="cityButton"
             type="button"
             value="vilnius"
             onClick={(e) => onclicked(e.target.value)}
