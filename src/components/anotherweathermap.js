@@ -24,6 +24,7 @@ const Anotherweathermap = (props) => {
   });
 
   let url = "places/" + encodeURIComponent(inputValue) + "/forecasts/long-term";
+
   
 
   const getDropDownPlaces = async () => {
