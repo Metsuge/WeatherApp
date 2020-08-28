@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       function (position) {
-        console.log(position);
+        // console.log(position);
       },
       function(error) {
         console.log("Error code: " + error.code + " - " +  error.message);

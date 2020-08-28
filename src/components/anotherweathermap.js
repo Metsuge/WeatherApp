@@ -5,7 +5,22 @@ import moment from "moment";
 import "moment/locale/lt";
 
 
-
+(function() {
+  var cors_api_host = 'cors-anywhere.herokuapp.com';
+  var cors_api_url = 'https://' + cors_api_host + '/';
+  var slice = [].slice;
+  var origin = window.location.protocol + '//' + window.location.host;
+  var open = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function() {
+      var args = slice.call(arguments);
+      var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+      if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+          targetOrigin[1] !== cors_api_host) {
+          args[1] = cors_api_url + args[1];
+      }
+      return open.apply(this, args);
+  };
+})();
 
 const Anotherweathermap = (props) => {
   const listDOMelement = document.getElementById("myDropdown");
@@ -23,12 +38,13 @@ const Anotherweathermap = (props) => {
     time: "",
   });
 
-  let url = "places/" + encodeURIComponent(inputValue) + "/forecasts/long-term";
-
+  let url = "https://api.meteo.lt/v1/places/" + encodeURIComponent(inputValue) + "/forecasts/long-term";
+  let urlForPlaces = "https://api.meteo.lt/v1/places";
   
 
   const getDropDownPlaces = async () => {
-    const NamesData = await axios.get("places");
+    const NamesData = await axios.get(urlForPlaces);
+    
     const realList = NamesData.data;
     let iteminarray = [];
 
