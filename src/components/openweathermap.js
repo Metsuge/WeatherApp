@@ -2,7 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import LTCityNames from "../lt-city-names.json";
 
+
+
 const Openweathermap = (props) => {
+  require('dotenv').config()
+  const environment = process.env.NODE_ENV;
+
+  const secret = process.env.REACT_APP_SECRET;
+
+  
   const [CityId, setId] = useState("598316");
   const [searchList, setSearcList] = useState([]); //drop down list according to seach word
   const [text, setText] = useState(""); //text in the input field
@@ -14,10 +22,25 @@ const Openweathermap = (props) => {
 
   const listDOM = document.getElementById("myDropdownWeather");
 
+ 
+  
   let url =
-    "https://api.openweathermap.org/data/2.5/weather?id=" +
-    CityId +
-    "&units=metric&lang=lt&appid=60bec95847abadde2f970c50b4e71710";
+    `https://api.openweathermap.org/data/2.5/weather?id=${CityId}&units=metric&lang=lt&appid=${secret}`;
+
+  
+  const getCityByCoords = async () => {
+    let coordsUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${props.lat}&lon=${props.long}&units=metric&lang=lt&appid=${secret}`
+       if (props.lat !== '0' && props.long !== '0'){
+      const dataByUserCoords = await axios.get(coordsUrl)
+      console.log(dataByUserCoords.data);
+      setMultiple({
+        ...multiple,
+        temp: dataByUserCoords.data.main.temp,
+        windspeed: dataByUserCoords.data.wind.speed,
+        name: dataByUserCoords.data.name,
+      });
+    }
+  }  
 
   const getOpenData = async () => {
     const dataOpen = await axios.get(url);
@@ -70,9 +93,11 @@ const Openweathermap = (props) => {
 
   useEffect(() => {
     getOpenData();
-  }, [CityId]);
+    getCityByCoords()
+  }, [CityId, props.lat]);
 
   const onBTNclicked = (value) => {
+    
     setId(value);
     changeBckg(value);
   };
@@ -83,13 +108,13 @@ const Openweathermap = (props) => {
 
   const changeBckg = (cityname) => {
     switch (cityname) {
-      case "vilnius":
+      case "593116":
         setBckg(props.vilnius);
         break;
-      case "kaunas":
+      case "598316":
         setBckg(props.kaunas);
         break;
-      case "nida":
+      case "596612":
         setBckg(props.nida);
         break;
       default:

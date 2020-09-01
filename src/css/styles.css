@@ -10,10 +10,15 @@
 }
 
 .component-div {
-  margin: auto;
   width: 100%;
   padding-top: 10%;
+  
+}
+.smaller-comp-div{
+  margin:auto;
   display: flex;
+  width:80%;
+  justify-content: center;
 }
 
 .ul-list li {
@@ -47,3 +52,4 @@
   top: 5px;
   left: 5px;
 }
+
