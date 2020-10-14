@@ -1,28 +1,18 @@
-.buttonDiv {
-position: absolute;
-bottom: 10px;
-left: 5px;
+.cityButton {
+  background-color: #c1ddf0;
+  color: black;
+  padding: 10px;
+  font-size: 10x;
+  border: none;
+  cursor: pointer;
+  margin: 3px;
+  border-radius: 9px;
 }
 
-.cityButton{
-    background-color: #c1ddf0;
-    color: black;
-    padding: 10px;
-    font-size: 10x;
-    border: none;
-    cursor: pointer;
-    margin:3px;
+.cityButton:hover {
+  background-color: #8bc0e4;
 }
 
-.cityButton:hover{
-    background-color: #8bc0e4;
-    
+.cityButton:active {
+  transform: scale(0.95);
 }
-
-.cityButton:active{
-    transform: scale(.95);
-}
-
-/* .scaleBtn{
-    scale()
-} */

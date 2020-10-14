@@ -1,49 +1,61 @@
 .dropbtn {
-    background-color: #c1ddf0;
-    color: black;
-    padding: 10px;
-    font-size: 10x;
-    border: none;
-    cursor: pointer;
-    margin:8px;
-  }
-  
-  /* Dropdown button on hover & focus */
-  .dropbtn:hover, .dropbtn:focus {
-    background-color: #8bc0e4;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
-  
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #ddd}
-  
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-  .show {display:block;}
+  background-color: #c1ddf0;
+  color: black;
+  padding: 10px;
+  font-size: 10x;
+  border: none;
+  cursor: pointer;
+  margin: 8px;
+  border-radius: 9px;
+}
 
-  .dropdown-list{
-    list-style-type: none;
-    border: 1px grey;
-  }
+.dropbtn:hover,
+.dropbtn:focus {
+  background-color: #8bc0e4;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  left: 70px;
+  border-radius: 10px;
+}
+
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
+
+.dropdown-list {
+  list-style-type: none;
+  border: 1px grey;
+  padding-left: 10px;
+}
+
+.dropdown-list li {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+}

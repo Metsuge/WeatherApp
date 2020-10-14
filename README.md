@@ -15,3 +15,4 @@ Used Suspense on loading the text about temperature, wind and city name. There's
 Background picture was created with Adebe Photoshop.
 
 ![](https://github.com/Metsuge/WeatherApp/blob/master/WeatherAppImage.JPG)
+
