@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import axios from "axios";
 
 import moment from "moment";
 import "moment/locale/lt";
 
-import './CORS';
+import "./CORS";
+import SuspenseMeteo from "./SuspenseMeteo";
 
 
-
-const Anotherweathermap = (props) => {
+const MeteoLT = (props) => {
   const listDOMelement = document.getElementById("myDropdown");
 
   //STATES
@@ -24,13 +24,14 @@ const Anotherweathermap = (props) => {
     time: "",
   });
 
-  let url = "https://api.meteo.lt/v1/places/" + encodeURIComponent(inputValue) + "/forecasts/long-term";
+  let url =
+    "https://api.meteo.lt/v1/places/" +
+    encodeURIComponent(inputValue) +
+    "/forecasts/long-term";
   let urlForPlaces = "https://api.meteo.lt/v1/places";
-  
 
   const getDropDownPlaces = async () => {
     const NamesData = await axios.get(urlForPlaces);
-    
     const realList = NamesData.data;
     let iteminarray = [];
 
@@ -39,6 +40,7 @@ const Anotherweathermap = (props) => {
         iteminarray.push(realList[i]);
       }
     }
+
     setPlaceList(iteminarray);
   };
 
@@ -96,7 +98,6 @@ const Anotherweathermap = (props) => {
   };
 
   const onclicked = (value) => {
-  
     setValue(value);
     changeBckg(value);
     // setText(value);
@@ -113,7 +114,9 @@ const Anotherweathermap = (props) => {
           correctResult = regex.test(placeList[i].name);
           if (correctResult) {
             dropdownList.push(placeList[i]);
-            setSearcList(dropdownList);
+            //in dropdown list show only 8 items
+            let dropdownItemNr = dropdownList.slice(0, 4);
+            setSearcList(dropdownItemNr);
           }
           listDOMelement.classList.add("show");
         }
@@ -137,71 +140,74 @@ const Anotherweathermap = (props) => {
 
   return (
     <>
-      <div className="info-box" id="bckgAnother" style={css}>
-        <h1 className="origin-title">Meteo.lt</h1>
-        <div className="blurr"></div>
-        <div className="ul-list-div">
-          <ul className="ul-list">
-            <li>
-              {multiple.cityName} {multiple.temp} °C
-            </li>
-            <li>Vėjas: {multiple.windspeed} m/s</li>
-          </ul>
+      <div>
+        <div>
+          <h1 className="origin-title-div">Meteo.lt</h1>
         </div>
-        <div className="buttonDiv">
-          <div className="dropdown">
-            <input
-              value={text}
-              className="dropbtn"
-              type="text"
-              placeholder="Enter address"
-              onChange={(e) => {
-                onChangeInput(e.target.value);
-              }}
-            ></input>
-            <div id="myDropdown" className="dropdown-content">
-              {searchList.map((itemInArray) => {
-                return (
-                  <ul className="dropdown-list">
-                    <li
-                      value={itemInArray}
-                      onClick={() => onSearchResultClick(itemInArray.code)}
-                    >
-                      {itemInArray.name}
-                    </li>
-                  </ul>
-                );
-              })}
+
+        <div className="info-box" id="bckgAnother" style={css}>
+          <div className="main-content">
+            <Suspense fallback={"Loading"}>
+              <SuspenseMeteo multiple={multiple}/>
+            </Suspense>
+            <div className="buttonDiv">
+              <div className="dropdown">
+                <input
+                  value={text}
+                  className="dropbtn"
+                  type="text"
+                  placeholder="Enter city name"
+                  onChange={(e) => {
+                    onChangeInput(e.target.value);
+                  }}
+                ></input>
+                <div id="myDropdown" className="dropdown-content">
+                  {searchList.map((itemInArray) => {
+                    return (
+                      <ul className="dropdown-list">
+                        <li
+                          value={itemInArray}
+                          onClick={() => onSearchResultClick(itemInArray.code)}
+                        >
+                          {itemInArray.name}
+                        </li>
+                      </ul>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="cityButtonDiv">
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="neringa-nida"
+                  onClick={(e) => onclicked(e.target.value)}
+                >
+                  Nida
+                </button>
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="kaunas"
+                  onClick={(e) => onclicked(e.target.value)}
+                >
+                  Kaunas
+                </button>
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="vilnius"
+                  onClick={(e) => onclicked(e.target.value)}
+                >
+                  Vilnius
+                </button>
+              </div>
             </div>
           </div>
-          <button
-            className="cityButton"
-            type="button"
-            value="neringa-nida"
-            onClick={(e) => onclicked(e.target.value)}
-          >
-            Nida
-          </button>
-          <button
-            className="cityButton"
-            type="button"
-            value="kaunas"
-            onClick={(e) => onclicked(e.target.value)}
-          >
-            Kaunas
-          </button>
-          <button
-            className="cityButton"
-            type="button"
-            value="vilnius"
-            onClick={(e) => onclicked(e.target.value)}
-          >
-            Vilnius
-          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default Anotherweathermap;
+export default MeteoLT;

@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import axios from "axios";
 import LTCityNames from "../lt-city-names.json";
-
-
+import SuspenseComponent from "./SuspenseComponent";
 
 const Openweathermap = (props) => {
-  require('dotenv').config()
+  require("dotenv").config();
   const environment = process.env.NODE_ENV;
 
   const secret = process.env.REACT_APP_SECRET;
 
-  
   const [CityId, setId] = useState("598316");
   const [searchList, setSearcList] = useState([]); //drop down list according to seach word
   const [text, setText] = useState(""); //text in the input field
@@ -22,16 +20,12 @@ const Openweathermap = (props) => {
 
   const listDOM = document.getElementById("myDropdownWeather");
 
- 
-  
-  let url =
-    `https://api.openweathermap.org/data/2.5/weather?id=${CityId}&units=metric&lang=lt&appid=${secret}`;
+  let url = `https://api.openweathermap.org/data/2.5/weather?id=${CityId}&units=metric&lang=lt&appid=${secret}`;
 
-  
   const getCityByCoords = async () => {
-    let coordsUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${props.lat}&lon=${props.long}&units=metric&lang=lt&appid=${secret}`
-       if (props.lat !== '0' && props.long !== '0'){
-      const dataByUserCoords = await axios.get(coordsUrl)
+    let coordsUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${props.lat}&lon=${props.long}&units=metric&lang=lt&appid=${secret}`;
+    if (props.lat !== "0" && props.long !== "0") {
+      const dataByUserCoords = await axios.get(coordsUrl);
       console.log(dataByUserCoords.data);
       setMultiple({
         ...multiple,
@@ -40,7 +34,7 @@ const Openweathermap = (props) => {
         name: dataByUserCoords.data.name,
       });
     }
-  }  
+  };
 
   const getOpenData = async () => {
     const dataOpen = await axios.get(url);
@@ -93,11 +87,10 @@ const Openweathermap = (props) => {
 
   useEffect(() => {
     getOpenData();
-    getCityByCoords()
+    getCityByCoords();
   }, [CityId, props.lat]);
 
   const onBTNclicked = (value) => {
-    
     setId(value);
     changeBckg(value);
   };
@@ -124,58 +117,62 @@ const Openweathermap = (props) => {
 
   return (
     <>
-      <div className="info-box" id="bckg" style={css}>
-        <h1 className="origin-title">Open Weather App</h1>
-        <div className="blurr"></div>
-        <div className="ul-list-div">
-          <ul className="ul-list">
-            <li>
-              {multiple.name} {multiple.temp} °C
-            </li>
-            <li>Vėjas: {multiple.windspeed} m/s</li>
-          </ul>
+      <div>
+        <div className="origin-title-div">
+          <h1 className="origin-title">Open Weather Map</h1>
         </div>
-        <div className="buttonDiv">
-          <input
-            value={text}
-            onChange={onChangeInput}
-            className="dropbtn"
-            type="text"
-            placeholder="Enter address"
-          ></input>
-          <div id="myDropdownWeather" className="dropdown-content">
-            {searchList.map((itemInArray) => (
-              <ul className='dropdown-list'>
-                <li onClick={() => onResultClick(itemInArray)}>
-                  {itemInArray.name}
-                </li>
-              </ul>
-            ))}
+        <div className="info-box" id="bckg" style={css}>
+          <div className="main-content">
+            <Suspense fallback={"Loading..."}>
+              <div className="ul-list-div">
+                <SuspenseComponent multiple={multiple} />
+              </div>
+            </Suspense>
+            <div className="buttonDiv">
+              <input
+                value={text}
+                onChange={onChangeInput}
+                className="dropbtn"
+                type="text"
+                placeholder="Enter city name"
+              ></input>
+              <div id="myDropdownWeather" className="dropdown-content">
+                {searchList.map((itemInArray) => (
+                  <ul className="dropdown-list">
+                    <li onClick={() => onResultClick(itemInArray)}>
+                      {itemInArray.name}
+                    </li>
+                  </ul>
+                ))}
+              </div>
+              <div className="cityButtonDiv">
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="596612"
+                  onClick={(e) => onBTNclicked(e.target.value)}
+                >
+                  Nida
+                </button>
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="598316"
+                  onClick={(e) => onBTNclicked(e.target.value)}
+                >
+                  Kaunas
+                </button>
+                <button
+                  className="cityButton"
+                  type="button"
+                  value="593116"
+                  onClick={(e) => onBTNclicked(e.target.value)}
+                >
+                  Vilnius
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            className="cityButton"
-            type="button"
-            value="596612"
-            onClick={(e) => onBTNclicked(e.target.value)}
-          >
-            Nida
-          </button>
-          <button
-            className="cityButton"
-            type="button"
-            value="598316"
-            onClick={(e) => onBTNclicked(e.target.value)}
-          >
-            Kaunas
-          </button>
-          <button
-            className="cityButton"
-            type="button"
-            value="593116"
-            onClick={(e) => onBTNclicked(e.target.value)}
-          >
-            Vilnius
-          </button>
         </div>
       </div>
     </>
