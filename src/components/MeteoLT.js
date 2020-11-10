@@ -161,7 +161,7 @@ const MeteoLT = (props) => {
                     onChangeInput(e.target.value);
                   }}
                 ></input>
-                <div id="myDropdown" className="dropdown-content">
+                <div id="myDropdown" className="dropdown-content" style={{left: '10px'}}>
                   {searchList.map((itemInArray) => {
                     return (
                       <ul className="dropdown-list">
